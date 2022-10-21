@@ -1,4 +1,5 @@
 # Musicapp
+
 npm install
 npm start
 
@@ -13,8 +14,17 @@ native: Thực hiện thay đổi ở phần native
 others: Không thuộc 2 scope trên
 Một số loại type thường dùng:
 
-build: Sử dụng khi sửa version, bundleId, ... config dùng để build. Ví dụ: git commit -m "build(native): pump android version code"
-chore: Sử dụng khi thực hiện sửa các thay đổi không có trong các type khác. Ví dụ: git commit -m "chore(other): fix utils function"
-docs: Sử dụng khi thực hiện thay đổi trong README, document,... etc. Ví dụ: git commit -m "docs(other): update README"
-feat : Sử dụng khi thực hiện một feature mới. Ví dụ: git commit -m "feat(js): implement create appliance"
-fix : Sử dụng khi thực hiện fix bug. Ví dụ: git commit -m "fix(js): fix create appliance don't search"
+build: Sử dụng khi sửa version, bundleId, ... config dùng để build.
+Ví dụ: git commit -m "build(native): pump android version code"
+
+chore: Sử dụng khi thực hiện sửa các thay đổi không có trong các type khác.
+Ví dụ: git commit -m "chore(other): fix utils function"
+
+docs: Sử dụng khi thực hiện thay đổi trong README, document,... etc.
+Ví dụ: git commit -m "docs(other): update README"
+
+feat : Sử dụng khi thực hiện một feature mới.
+Ví dụ: git commit -m "feat(js): implement create appliance"
+
+fix : Sử dụng khi thực hiện fix bug.
+Ví dụ: git commit -m "fix(js): fix create appliance don't search"

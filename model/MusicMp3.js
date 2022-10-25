@@ -16,9 +16,18 @@ const MusicMp3Schema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    account: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
+    like: {
+        type: [Array],
+        required: true
+    },
+    comment: {
+        type: [
+            {
+                username: String,
+                comment: String
+            }
+        ],
+        required: true,
     }
 });
 

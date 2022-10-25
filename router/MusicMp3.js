@@ -8,11 +8,10 @@ musicMp3Router.post(
     "/createMp3",
     passport.authenticate('jwt', { session: false }),
     (req, res) => {
-        const { name, describe, image, link } = req.body;
-        const account = req.user._id;
+        const { name, describe, image, link, like, comment } = req.body;
 
-        const newMusicMp3 = new MusicMp3({ name, describe, image, link, account });
-        MusicMp3.findOne({ account: account }, (err, exists) => {
+        const newMusicMp3 = new MusicMp3({ name, describe, image, link, like, comment });
+        MusicMp3.findOne({ name: name }, (err, exists) => {
             if (err) {
                 return res.status(400).json({
                     success: false,
@@ -74,8 +73,8 @@ musicMp3Router.get(
     "/getMp3",
     passport.authenticate('jwt', { session: false }),
     (req, res) => {
-        const account = req.user._id;
-        MusicMp3.findOne({ account }, (err, result) => {
+        const { name } = req.body;
+        MusicMp3.findOne({ name }, (err, result) => {
             if (err) {
                 return res.status(400).json({
                     success: false,
@@ -113,15 +112,66 @@ musicMp3Router.get(
     }
 )
 
+//api like, comment bai hat
+musicMp3Router.patch(
+    "/updateMp3",
+    passport.authenticate('jwt', { session: false }),
+    (req, res) => {
+        const data = ({ name, like, comment } = req.body);
+
+        const updates = data;
+
+        const options = { new: true };
+
+        MusicMp3.updateOne({ name }, updates, options).then((result) => {
+            if (result.nModified < 1) {
+                return res.status(201).json({
+                    success: false,
+                    message: {
+                        msgBody: 'Có lỗi khi update bài hát',
+                        msgError: true,
+                    },
+                })
+            }
+            return res.status(200).json({
+                success: true,
+                message: {
+                    msgBody: 'Update bài hát thành công',
+                    msgError: false,
+                },
+                result,
+            })
+        }).catch((err) => {
+            if (err.code === 11000) {
+                return res.status(201).json({
+                    success: false,
+                    message: {
+                        msgBody: 'Bài hát đã tồn tại',
+                        msgError: true,
+                    },
+                    existMusic: true,
+                })
+            }
+            return res.status(400).json({
+                success: false,
+                message: {
+                    msgBody: 'Có lỗi khi update bài hát',
+                    msgError: true,
+                },
+                err,
+            })
+        })
+    }
+)
+
 //api xóa bài hát
 
 musicMp3Router.delete(
     "/deleteMp3",
     passport.authenticate("jwt", { session: false }),
     (req, res) => {
-        const account = req.user._id;
-
-        MusicMp3.deleteOne({ account }, (err) => {
+        const { name } = req.body;
+        MusicMp3.deleteOne({ name }, (err) => {
             if (err) {
                 return res.status(400).json({
                     success: false,

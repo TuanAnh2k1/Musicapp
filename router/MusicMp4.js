@@ -112,6 +112,49 @@ musicMp4Router.get(
     }
 )
 
+//api lay tất cả thong tin bai hat
+musicMp4Router.get(
+    "/getAllMp4",
+    passport.authenticate('jwt', { session: false }),
+    (req, res) => {
+        MusicMp4.find((err, result) => {
+            if (err) {
+                return res.status(400).json({
+                    success: false,
+                    message: {
+                        msgBody: 'Có lỗi khi lấy dữ liệu',
+                        msgError: true,
+                    },
+                    err,
+                })
+            }
+            else {
+                if (!result) {
+                    return res.status(201).json({
+                        success: false,
+                        message: {
+                            msgBody: 'Bài hát không có sẵn',
+                            msgError: true,
+                        },
+                        existMusic: false,
+                    })
+                }
+                else {
+                    return res.status(200).json({
+                        success: true,
+                        message: {
+                            msgBody: 'Lấy tất cả bài hát thành công',
+                            msgError: true,
+                        },
+                        existMusic: true,
+                        result,
+                    })
+                }
+            }
+        })
+    }
+)
+
 //api xóa bài hát
 
 musicMp4Router.delete(

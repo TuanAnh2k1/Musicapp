@@ -68,7 +68,7 @@ musicMp3Router.post(
         })
     });
 
-//api lay thong tin bai hat
+//api lay thong tin 1 bai hat
 musicMp3Router.get(
     "/getMp3",
     passport.authenticate('jwt', { session: false }),
@@ -101,6 +101,49 @@ musicMp3Router.get(
                         success: true,
                         message: {
                             msgBody: 'Lấy bài hát thành công',
+                            msgError: true,
+                        },
+                        existMusic: true,
+                        result,
+                    })
+                }
+            }
+        })
+    }
+)
+
+//api lay all bai hat
+musicMp3Router.get(
+    "/getAllMp3",
+    passport.authenticate('jwt', { session: false }),
+    (req, res) => {
+        MusicMp3.find((err, result) => {
+            if (err) {
+                return res.status(400).json({
+                    success: false,
+                    message: {
+                        msgBody: 'Có lỗi khi lấy dữ liệu',
+                        msgError: true,
+                    },
+                    err,
+                })
+            }
+            else {
+                if (!result) {
+                    return res.status(201).json({
+                        success: false,
+                        message: {
+                            msgBody: 'Bài hát không có sẵn',
+                            msgError: true,
+                        },
+                        existMusic: false,
+                    })
+                }
+                else {
+                    return res.status(200).json({
+                        success: true,
+                        message: {
+                            msgBody: 'Lấy tất cả bài hát thành công',
                             msgError: true,
                         },
                         existMusic: true,

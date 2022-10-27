@@ -8,9 +8,9 @@ musicMp4Router.post(
     "/createMp4",
     passport.authenticate('jwt', { session: false }),
     (req, res) => {
-        const { keyId, name, like } = req.body;
+        const { keyId, name, like, comment } = req.body;
 
-        const newMusicMp4 = new MusicMp4({ keyId, name, like });
+        const newMusicMp4 = new MusicMp4({ keyId, name, like, comment });
         MusicMp4.findOne({ keyId }, (err, exists) => {
             if (err) {
                 return res.status(400).json({

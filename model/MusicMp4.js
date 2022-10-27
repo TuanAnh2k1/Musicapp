@@ -11,6 +11,15 @@ const MusicMp4Schema = new mongoose.Schema({
     like: {
         type: Array,
         required: true,
+    },
+    comment: {
+        type: [
+            {
+                username: String,
+                comment: String
+            }
+        ],
+        required: true,
     }
 });
 

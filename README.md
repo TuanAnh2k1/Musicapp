@@ -1,7 +1,14 @@
 # Musicapp
 
+# Cài đặt thư viện
+
 npm install
+
+# Chạy dự án
+
 npm start
+
+# Lưu ý khi tách breanch và commit
 
 Mọi người vui lòng commit theo format sau, chi tiết các loại type và scope xem trong commitlint.config.js
 

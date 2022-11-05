@@ -6,7 +6,7 @@ const MusicMp3 = require("../model/MusicMp3");
 //api tao bai hat 
 musicMp3Router.post(
     "/createMp3",
-    passport.authenticate('jwt', { session: false }),
+    // passport.authenticate('jwt', { session: false }),
     (req, res) => {
         const { name, describe, image, link, like, comment } = req.body;
 
@@ -71,7 +71,7 @@ musicMp3Router.post(
 //api lay thong tin 1 bai hat
 musicMp3Router.get(
     "/getMp3",
-    passport.authenticate('jwt', { session: false }),
+    // passport.authenticate('jwt', { session: false }),
     (req, res) => {
         const { name } = req.body;
         MusicMp3.findOne({ name }, (err, result) => {
@@ -115,7 +115,7 @@ musicMp3Router.get(
 //api lay all bai hat
 musicMp3Router.get(
     "/getAllMp3",
-    passport.authenticate('jwt', { session: false }),
+    // passport.authenticate('jwt', { session: false }),
     (req, res) => {
         MusicMp3.find((err, result) => {
             if (err) {
@@ -158,7 +158,7 @@ musicMp3Router.get(
 //api like, comment bai hat
 musicMp3Router.patch(
     "/updateMp3",
-    passport.authenticate('jwt', { session: false }),
+    // passport.authenticate('jwt', { session: false }),
     (req, res) => {
         const data = ({ name, like, comment } = req.body);
 
@@ -211,7 +211,7 @@ musicMp3Router.patch(
 
 musicMp3Router.delete(
     "/deleteMp3",
-    passport.authenticate("jwt", { session: false }),
+    // passport.authenticate("jwt", { session: false }),
     (req, res) => {
         const { name } = req.body;
         MusicMp3.deleteOne({ name }, (err) => {

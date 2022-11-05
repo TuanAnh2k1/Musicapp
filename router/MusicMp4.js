@@ -6,7 +6,7 @@ const MusicMp4 = require("../model/MusicMp4");
 //api tao bai hat 
 musicMp4Router.post(
     "/createMp4",
-    passport.authenticate('jwt', { session: false }),
+    // passport.authenticate('jwt', { session: false }),
     (req, res) => {
         const { keyId, name, like, comment } = req.body;
 
@@ -71,7 +71,7 @@ musicMp4Router.post(
 //api lay thong tin bai hat
 musicMp4Router.get(
     "/getMp4",
-    passport.authenticate('jwt', { session: false }),
+    // passport.authenticate('jwt', { session: false }),
     (req, res) => {
         const { keyId } = req.body;
         MusicMp4.findOne({ keyId }, (err, result) => {
@@ -115,7 +115,7 @@ musicMp4Router.get(
 //api lay tất cả thong tin bai hat
 musicMp4Router.get(
     "/getAllMp4",
-    passport.authenticate('jwt', { session: false }),
+    // passport.authenticate('jwt', { session: false }),
     (req, res) => {
         MusicMp4.find((err, result) => {
             if (err) {

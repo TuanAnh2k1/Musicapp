@@ -2,15 +2,16 @@ const express = require("express");
 const musicMp4Router = express.Router();
 const passport = require("passport");
 const MusicMp4 = require("../model/MusicMp4");
+const User = require("../model/User");
 
 //api tao bai hat 
 musicMp4Router.post(
     "/createMp4",
     // passport.authenticate('jwt', { session: false }),
     (req, res) => {
-        const { keyId, name, like, comment } = req.body;
+        const { keyId, name } = req.body;
 
-        const newMusicMp4 = new MusicMp4({ keyId, name, like, comment });
+        const newMusicMp4 = new MusicMp4({ keyId, name, like: [], comment: [] });
         MusicMp4.findOne({ keyId }, (err, exists) => {
             if (err) {
                 return res.status(400).json({
@@ -152,6 +153,72 @@ musicMp4Router.get(
                 }
             }
         })
+    }
+)
+
+//api sửa thông tin, like, comment
+
+musicMp4Router.patch(
+    "/updateMp4",
+    // passport.authenticate('jwt', { session: false }),
+    (req, res) => {
+        const data = ({ username, keyId, like, comment } = req.body);
+
+        const updates = data;
+
+        const options = { new: true };
+
+        User.findOne({ username }, (err, user) => {
+            if (err)
+                res.status(500).json({
+                    message: { msgBody: "Error", msgError: true },
+                });
+            if (user) {
+                MusicMp4.updateOne({ keyId }, updates, options).then((result) => {
+                    if (result.nModified < 1) {
+                        return res.status(201).json({
+                            success: false,
+                            message: {
+                                msgBody: 'Có lỗi khi update bài hát',
+                                msgError: true,
+                            },
+                        })
+                    }
+                    return res.status(200).json({
+                        success: true,
+                        message: {
+                            msgBody: 'Update bài hát thành công',
+                            msgError: false,
+                        },
+                        result,
+                    })
+                }).catch((err) => {
+                    if (err.code === 11000) {
+                        return res.status(201).json({
+                            success: false,
+                            message: {
+                                msgBody: 'Bài hát đã tồn tại',
+                                msgError: true,
+                            },
+                            existMusic: true,
+                        })
+                    }
+                    return res.status(400).json({
+                        success: false,
+                        message: {
+                            msgBody: 'Có lỗi khi update bài hát',
+                            msgError: true,
+                        },
+                        err,
+                    })
+                })
+            }
+            else {
+                res.status(201).json({
+                    message: { msgBody: "Ban Can Dang Nhap", msgError: true },
+                });
+            }
+        });
     }
 )
 

@@ -2,15 +2,16 @@ const express = require("express");
 const musicMp3Router = express.Router();
 const passport = require("passport");
 const MusicMp3 = require("../model/MusicMp3");
+const User = require("../model/User");
 
 //api tao bai hat 
 musicMp3Router.post(
     "/createMp3",
     // passport.authenticate('jwt', { session: false }),
     (req, res) => {
-        const { name, describe, image, link, like, comment } = req.body;
+        const { name, describe, image, link } = req.body;
 
-        const newMusicMp3 = new MusicMp3({ name, describe, image, link, like, comment });
+        const newMusicMp3 = new MusicMp3({ name, describe, image, link, like: [], comment: [] });
         MusicMp3.findOne({ name: name }, (err, exists) => {
             if (err) {
                 return res.status(400).json({
@@ -160,50 +161,63 @@ musicMp3Router.patch(
     "/updateMp3",
     // passport.authenticate('jwt', { session: false }),
     (req, res) => {
-        const data = ({ name, like, comment } = req.body);
+        const data = ({ username, name, like, comment } = req.body);
 
         const updates = data;
 
         const options = { new: true };
 
-        MusicMp3.updateOne({ name }, updates, options).then((result) => {
-            if (result.nModified < 1) {
-                return res.status(201).json({
-                    success: false,
-                    message: {
-                        msgBody: 'Có lỗi khi update bài hát',
-                        msgError: true,
-                    },
+        User.findOne({ username }, (err, user) => {
+            if (err)
+                res.status(500).json({
+                    message: { msgBody: "Error", msgError: true },
+                });
+            if (user) {
+                MusicMp3.updateOne({ name }, updates, options).then((result) => {
+                    if (result.nModified < 1) {
+                        return res.status(201).json({
+                            success: false,
+                            message: {
+                                msgBody: 'Có lỗi khi update bài hát',
+                                msgError: true,
+                            },
+                        })
+                    }
+                    return res.status(200).json({
+                        success: true,
+                        message: {
+                            msgBody: 'Update bài hát thành công',
+                            msgError: false,
+                        },
+                        result,
+                    })
+                }).catch((err) => {
+                    if (err.code === 11000) {
+                        return res.status(201).json({
+                            success: false,
+                            message: {
+                                msgBody: 'Bài hát đã tồn tại',
+                                msgError: true,
+                            },
+                            existMusic: true,
+                        })
+                    }
+                    return res.status(400).json({
+                        success: false,
+                        message: {
+                            msgBody: 'Có lỗi khi update bài hát',
+                            msgError: true,
+                        },
+                        err,
+                    })
                 })
             }
-            return res.status(200).json({
-                success: true,
-                message: {
-                    msgBody: 'Update bài hát thành công',
-                    msgError: false,
-                },
-                result,
-            })
-        }).catch((err) => {
-            if (err.code === 11000) {
-                return res.status(201).json({
-                    success: false,
-                    message: {
-                        msgBody: 'Bài hát đã tồn tại',
-                        msgError: true,
-                    },
-                    existMusic: true,
-                })
+            else {
+                res.status(201).json({
+                    message: { msgBody: "Ban Can Dang Nhap", msgError: true },
+                });
             }
-            return res.status(400).json({
-                success: false,
-                message: {
-                    msgBody: 'Có lỗi khi update bài hát',
-                    msgError: true,
-                },
-                err,
-            })
-        })
+        });
     }
 )
 
@@ -213,26 +227,39 @@ musicMp3Router.delete(
     "/deleteMp3",
     // passport.authenticate("jwt", { session: false }),
     (req, res) => {
-        const { name } = req.body;
-        MusicMp3.deleteOne({ name }, (err) => {
-            if (err) {
-                return res.status(400).json({
-                    success: false,
-                    message: {
-                        msgBody: 'Xóa bài hát không thành công',
-                        msgError: true,
-                    },
+        const { username, name } = req.body;
+        User.findOne({ username }, (err, user) => {
+            if (err)
+                res.status(500).json({
+                    message: { msgBody: "Error", msgError: true },
                 });
-            } else {
-                return res.status(200).json({
-                    success: true,
-                    message: {
-                        msgBody: 'Xóa bài hát thành công',
-                        msgError: false,
-                    },
+            if (user) {
+                MusicMp3.deleteOne({ name }, (err) => {
+                    if (err) {
+                        return res.status(400).json({
+                            success: false,
+                            message: {
+                                msgBody: 'Xóa bài hát không thành công',
+                                msgError: true,
+                            },
+                        });
+                    } else {
+                        return res.status(200).json({
+                            success: true,
+                            message: {
+                                msgBody: 'Xóa bài hát thành công',
+                                msgError: false,
+                            },
+                        });
+                    }
+                })
+            }
+            else {
+                res.status(201).json({
+                    message: { msgBody: "Ban Can Dang Nhap", msgError: true },
                 });
             }
-        })
+        });
     })
 
 module.exports = musicMp3Router;

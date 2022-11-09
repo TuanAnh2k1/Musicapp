@@ -70,7 +70,7 @@ musicMp3Router.post(
     });
 
 //api lay thong tin 1 bai hat
-musicMp3Router.get(
+musicMp3Router.post(
     "/getMp3",
     // passport.authenticate('jwt', { session: false }),
     (req, res) => {

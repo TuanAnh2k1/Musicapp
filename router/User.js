@@ -6,8 +6,7 @@ const passportConfig = require("../config/passport");
 const User = require("../model/User");
 // register
 userRouter.post("/register", (req, res) => {
-    const { username, password } = req.body;
-    const role = "user";
+    const { username, password, role } = req.body;
     //kiem tra username co ton tai khong
     User.findOne({ username }, (err, user) => {
         if (err)

@@ -69,13 +69,13 @@ singleRouter.post(
         })
     });
 
-//api lay thong tin 1 sản phẩm
+//api lay thong tin 1 đơn hàng theo user
 singleRouter.post(
     "/getSingle",
     // passport.authenticate('jwt', { session: false }),
     (req, res) => {
-        const { _id } = req.body;
-        Single.findOne({ _id }, (err, result) => {
+        const { idUser } = req.body;
+        Single.find({ idUser }, (err, result) => {
             if (err) {
                 return res.status(400).json({
                     success: false,

@@ -15,6 +15,7 @@ mongoose
 app.use("/", require("./router/User"));
 app.use("/profile", require("./router/Profile"));
 app.use("/shirt", require("./router/Shirt"));
+app.use("/single", require("./router/Single"));
 app.use("/mp3", require("./router/MusicMp3"));
 app.use("/mp4", require("./router/MusicMp4"));
 const PORT = process.env.PORT || 8080;

@@ -3,7 +3,7 @@ const shirtRouter = express.Router();
 const passport = require("passport");
 const Shirt = require("../model/Shirt");
 
-//api tao bai hat 
+//api tao ao 
 shirtRouter.post(
     "/createShirt",
     // passport.authenticate('jwt', { session: false }),
@@ -89,7 +89,7 @@ shirtRouter.post(
     }
 )
 
-//api lay all bai hat
+//api lay all ao
 shirtRouter.get(
     "/getAllShirt",
     // passport.authenticate('jwt', { session: false }),
@@ -132,7 +132,53 @@ shirtRouter.get(
     }
 )
 
-//api like, comment bai hat
+//api search name
+
+shirtRouter.get(
+    "/getAllShirt/:search",
+    // passport.authenticate('jwt', { session: false }),
+    (req, res) => {
+        const { search } = req.params;
+        Shirt.find((err, result) => {
+            if (err) {
+                return res.status(400).json({
+                    success: false,
+                    message: {
+                        msgBody: 'Có lỗi khi lấy dữ liệu',
+                        msgError: true,
+                    },
+                    err,
+                })
+            }
+            else {
+                if (!result) {
+                    return res.status(201).json({
+                        success: false,
+                        message: {
+                            msgBody: 'Danh sách sảm phẩm không có sẵn',
+                            msgError: true,
+                        },
+                        existShirt: false,
+                    })
+                }
+                else {
+                    result = result.filter(shirt => shirt.name.toLowerCase().includes(search.toLowerCase()))
+                    return res.status(200).json({
+                        success: true,
+                        message: {
+                            msgBody: 'Lấy tất cả sản phẩm theo tìm kiếm thành công',
+                            msgError: true,
+                        },
+                        existShirt: true,
+                        result,
+                    })
+                }
+            }
+        })
+    }
+)
+
+//api like, comment ao
 shirtRouter.patch(
     "/updateShirt",
     // passport.authenticate('jwt', { session: false }),

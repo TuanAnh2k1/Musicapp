@@ -20,6 +20,7 @@ singleRouter.post(
             phone,
             address,
             quantity,
+            status,
         } = req.body;
 
         const newSingle = new Single({
@@ -33,7 +34,8 @@ singleRouter.post(
             email,
             phone,
             address,
-            quantity
+            quantity,
+            status
         });
 
         newSingle.save((err, result) => {

@@ -44,6 +44,10 @@ const SingleSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    status: {
+        type: String,
+        required: true,
+    }
 });
 
 module.exports = mongoose.model("Single", SingleSchema);

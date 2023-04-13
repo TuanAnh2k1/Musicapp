@@ -8,9 +8,9 @@ shirtRouter.post(
     "/createShirt",
     // passport.authenticate('jwt', { session: false }),
     (req, res) => {
-        const { name, describe, image, price, supplier } = req.body;
+        const { name, describe, image, price, supplier, total } = req.body;
 
-        const newShirt = new Shirt({ name, describe, image, price, supplier });
+        const newShirt = new Shirt({ name, describe, image, price, supplier, total });
 
         newShirt.save((err, result) => {
             if (err) {

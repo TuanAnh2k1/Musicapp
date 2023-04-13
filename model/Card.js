@@ -1,29 +1,25 @@
 const mongoose = require("mongoose");
-const ShirtSchema = new mongoose.Schema({
-    name: {
-        type: String,
-        required: true,
-    },
-    describe: {
-        type: String,
-        required: true,
-    },
-    image: {
-        type: String,
-        required: true,
-    },
-    price: {
-        type: String,
-        required: true,
-    },
-    supplier: {
-        type: String,
-        required: true,
-    },
-    total: {
-        type: String,
-        required: true,
-    }
-});
 
-module.exports = mongoose.model("Shirt", ShirtSchema);
+const CardSchema = new mongoose.Schema({
+    tenchuthe: {
+        type: String,
+        required: true,
+    },
+    kieuthe: {
+        type: String,
+        required: true,
+    },
+    sothe: {
+        type: String,
+        required: true,
+    },
+    socvd: {
+        type: String,
+        required: true,
+    },
+    ngayhethan: {
+        type: String,
+        required: true,
+    },
+});
+module.exports = mongoose.model("Card", CardSchema);

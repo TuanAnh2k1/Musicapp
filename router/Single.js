@@ -3,7 +3,7 @@ const singleRouter = express.Router();
 const passport = require("passport");
 const Single = require("../model/Single");
 
-//api tao bai hat 
+//api tao đơn hàng 
 singleRouter.post(
     "/createSingle",
     // passport.authenticate('jwt', { session: false }),
@@ -115,7 +115,7 @@ singleRouter.post(
     }
 )
 
-//api lay all bai hat
+//api lay all đơn hàng
 singleRouter.get(
     "/getAllSingle",
     // passport.authenticate('jwt', { session: false }),
@@ -158,12 +158,26 @@ singleRouter.get(
     }
 )
 
-//api like, comment bai hat
+//api sua đơn hàng
 singleRouter.patch(
     "/updateSingle",
     // passport.authenticate('jwt', { session: false }),
     (req, res) => {
-        const data = ({ _id, name, describe, image, price, supplier } = req.body);
+        const data = ({
+            _id,
+            idShirt,
+            idUser,
+            name,
+            describe,
+            image,
+            price,
+            supplier,
+            email,
+            phone,
+            address,
+            quantity,
+            status
+        } = req.body);
 
         const updates = data;
 

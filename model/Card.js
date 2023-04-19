@@ -21,5 +21,9 @@ const CardSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    sotienphaitra: {
+        type: String,
+        required: true,
+    },
 });
 module.exports = mongoose.model("Card", CardSchema);

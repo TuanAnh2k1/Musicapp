@@ -88,11 +88,11 @@ profileRouter.post(
 );
 
 //Lấy thông tin hồ sơ theo tài khoản
-profileRouter.get(
+profileRouter.post(
     "/getProfile",
-    passport.authenticate('jwt', { session: false }),
+    // passport.authenticate('jwt', { session: false }),
     (req, res) => {
-        const account = req.user._id;
+        const account = req.body;
         Profile.findOne({ account }, (err, result) => {
             if (err) {
                 return res.status(400).json({
@@ -134,7 +134,7 @@ profileRouter.get(
 //Cập nhật hồ sơ cá nhân
 profileRouter.patch(
     "/updateProfile",
-    passport.authenticate('jwt', { session: false }),
+    // passport.authenticate('jwt', { session: false }),
     (req, res) => {
         const data = ({
             name,
@@ -146,7 +146,7 @@ profileRouter.patch(
         } = req.body);
 
         const updates = data;
-        const account = req.user._id;
+        const account = req.body;
         const options = { new: true };
         Profile.updateOne({ account }, updates, options).then((result) => {
             if (result.nModified < 1) {
@@ -192,9 +192,9 @@ profileRouter.patch(
 //Xóa hồ sơ
 profileRouter.delete(
     "/deleteProfile",
-    passport.authenticate("jwt", { session: false }),
+    // passport.authenticate("jwt", { session: false }),
     (req, res) => {
-        const account = req.user._id;
+        const account = req.body;
         Profile.deleteOne({ account }, (err) => {
             if (err) {
                 return res.status(400).json({

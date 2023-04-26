@@ -6,7 +6,7 @@ const Profile = require("../model/Profile");
 //Tạo hồ sơ cá nhân
 profileRouter.post(
     "/createProfile",
-    passport.authenticate('jwt', { session: false }),
+    // passport.authenticate('jwt', { session: false }),
     (req, res) => {
         const {
             name,
@@ -15,8 +15,8 @@ profileRouter.post(
             email,
             address,
             gender,
+            account,
         } = req.body;
-        const account = req.user._id;
         const newProfile = new Profile({
             name,
             birthday,
@@ -27,63 +27,39 @@ profileRouter.post(
             account,
         });
 
-        Profile.findOne({ account: account }, (err, exists) => {
+        newProfile.save((err, result) => {
             if (err) {
-                return res.status(400).json({
+                if (err.code === 11000) {
+                    return res.status(203).json({
+                        success: false,
+                        message: {
+                            msgBody: 'Email đã được tạo hồ sơ',
+                            msgError: true,
+                        },
+                        existEmail: true,
+                    });
+                }
+                return res.status(203).json({
                     success: false,
                     message: {
-                        msgBody: 'Có lỗi khi lấy dữ liệu',
+                        msgBody: 'Có lỗi khi tạo hồ sơ, vui lòng nhập đủ các trường thông tin',
                         msgError: true,
                     },
                     err,
                 });
             }
             else {
-                if (exists) {
-                    return res.status(203).json({
-                        success: false,
-                        message: {
-                            msgBody: 'Tài khoản đã tạo hồ sơ rồi',
-                            msgError: true,
-                        },
-                        existProfile: true,
-                    })
-                } else {
-                    newProfile.save((err, result) => {
-                        if (err) {
-                            if (err.code === 11000) {
-                                return res.status(203).json({
-                                    success: false,
-                                    message: {
-                                        msgBody: 'Email đã được tạo hồ sơ',
-                                        msgError: true,
-                                    },
-                                    existEmail: true,
-                                });
-                            }
-                            return res.status(203).json({
-                                success: false,
-                                message: {
-                                    msgBody: 'Có lỗi khi tạo hồ sơ, vui lòng nhập đủ các trường thông tin',
-                                    msgError: true,
-                                },
-                                err,
-                            });
-                        }
-                        else {
-                            return res.status(200).json({
-                                success: true,
-                                message: {
-                                    msgBody: 'Tạo hồ sơ thành công',
-                                    msgError: false,
-                                },
-                                result,
-                            });
-                        }
-                    });
-                }
+                return res.status(200).json({
+                    success: true,
+                    message: {
+                        msgBody: 'Tạo hồ sơ thành công',
+                        msgError: false,
+                    },
+                    result,
+                });
             }
-        })
+        });
+
     }
 );
 
@@ -137,18 +113,19 @@ profileRouter.patch(
     // passport.authenticate('jwt', { session: false }),
     (req, res) => {
         const data = ({
+            _id,
             name,
             birthday,
             sdt,
             email,
             address,
             gender,
+            account,
         } = req.body);
 
         const updates = data;
-        const account = req.body;
         const options = { new: true };
-        Profile.updateOne({ account }, updates, options).then((result) => {
+        Profile.updateOne({ _id }, updates, options).then((result) => {
             if (result.nModified < 1) {
                 return res.status(201).json({
                     success: false,

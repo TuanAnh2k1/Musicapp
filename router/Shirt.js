@@ -134,11 +134,11 @@ shirtRouter.get(
 
 //api search name
 
-shirtRouter.get(
-    "/getAllShirt/:search",
+shirtRouter.post(
+    "/getAllShirt/search",
     // passport.authenticate('jwt', { session: false }),
     (req, res) => {
-        const { search } = req.params;
+        const search = req.body.search;
         Shirt.find((err, result) => {
             if (err) {
                 return res.status(400).json({

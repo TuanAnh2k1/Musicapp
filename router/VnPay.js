@@ -4,7 +4,7 @@ const passport = require("passport");
 const Card = require("../model/Card");
 
 //api tao thong tin the ngan hang 
-vnPayRouter.get('/create_payment_url', function (req, res, next) {
+vnPayRouter.post('/create_payment_url', function (req, res, next) {
     // var ipAddr = req.headers['x-forwarded-for'] ||
     //     req.connection.remoteAddress ||
     //     req.socket.remoteAddress ||

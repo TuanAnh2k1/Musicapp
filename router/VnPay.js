@@ -4,11 +4,11 @@ const passport = require("passport");
 const Card = require("../model/Card");
 
 //api tao thong tin the ngan hang 
-vnPayRouter.post('/create_payment_url', function (req, res, next) {
-    var ipAddr = req.headers['x-forwarded-for'] ||
-        req.connection.remoteAddress ||
-        req.socket.remoteAddress ||
-        req.connection.socket.remoteAddress;
+vnPayRouter.get('/create_payment_url', function (req, res, next) {
+    // var ipAddr = req.headers['x-forwarded-for'] ||
+    //     req.connection.remoteAddress ||
+    //     req.socket.remoteAddress ||
+    //     req.connection.socket.remoteAddress;
 
     // var config = require('config');
     // var dateFormat = require('dateformat');
@@ -45,7 +45,7 @@ vnPayRouter.post('/create_payment_url', function (req, res, next) {
     vnp_Params['vnp_OrderType'] = orderType;
     vnp_Params['vnp_Amount'] = amount * 100;
     vnp_Params['vnp_ReturnUrl'] = returnUrl;
-    vnp_Params['vnp_IpAddr'] = ipAddr;
+    // vnp_Params['vnp_IpAddr'] = ipAddr;
     vnp_Params['vnp_CreateDate'] = createDate;
     if (bankCode !== null && bankCode !== '') {
         vnp_Params['vnp_BankCode'] = bankCode;

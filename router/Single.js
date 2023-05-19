@@ -251,4 +251,51 @@ singleRouter.delete(
         })
     })
 
+singleRouter.get('/best_selling', (req, res) => {
+    const query = `
+          SELECT s.idShirt, p.name, COUNT(s.idShirt) AS totalSold
+          FROM singles s
+          INNER JOIN shirts p ON s.idShirt = p._id
+          WHERE s.status = '2'
+          GROUP BY s.idShirt, p.name
+          ORDER BY totalSold DESC
+          LIMIT 1;
+        `;
+
+    // Thực hiện truy vấn đến cơ sở dữ liệu
+    connection.query(query, (error, results) => {
+        if (error) {
+            res.status(500).json({ error: 'Lỗi truy vấn cơ sở dữ liệu' });
+        } else {
+            if (results.length === 0) {
+                res.status(404).json({ message: 'Không tìm thấy đơn hàng bán chạy nhất' });
+            } else {
+                const bestSellingOrder = results[0];
+
+                // Lấy thông tin chi tiết của đơn hàng bán chạy nhất
+                const getOrderQuery = `
+                SELECT *
+                FROM singles
+                WHERE idShirt = ${bestSellingOrder.idShirt}
+                  AND status = '2'
+                LIMIT 1;
+              `;
+
+                connection.query(getOrderQuery, (error, orderResults) => {
+                    if (error) {
+                        res.status(500).json({ error: 'Lỗi truy vấn cơ sở dữ liệu' });
+                    } else {
+                        if (orderResults.length === 0) {
+                            res.status(404).json({ message: 'Không tìm thấy đơn hàng bán chạy nhất' });
+                        } else {
+                            const bestSellingOrderDetails = orderResults[0];
+                            res.json(bestSellingOrderDetails);
+                        }
+                    }
+                });
+            }
+        }
+    });
+});
+
 module.exports = singleRouter;

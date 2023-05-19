@@ -17,5 +17,6 @@ app.use("/profile", require("./router/Profile"));
 app.use("/shirt", require("./router/Shirt"));
 app.use("/single", require("./router/Single"));
 app.use("/card", require("./router/Card"));
+app.use("/sale", require("./router/Sale"));
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, console.log(`Server Run With Port ${PORT}`));
